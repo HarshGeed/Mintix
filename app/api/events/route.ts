@@ -1,17 +1,21 @@
-import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
-import { events } from "@/db/schema/event";
+import { NextResponse } from "next/server";
 import { createEventSchema } from "@/lib/validators/events.schema";
+import { createEvent, getAllEvents } from "@/services/events.services";
 
-export async function POST(req: NextRequest){
-    const body = await req.json();
-    const data = createEventSchema.parse(body);
-
-    await db.insert(events).values(data);
-    return NextResponse.json({success: true, message: "Event created successfully"})
+export async function GET() {
+  const events = await getAllEvents();
+  return NextResponse.json(events);
 }
 
-export async function GET(){
-    const allEvents = await db.select().from(events);
-    return NextResponse.json(allEvents);
+export async function POST(req: Request) {
+  const body = await req.json();
+  const parsed = createEventSchema.parse(body);
+
+  const id = await createEvent({
+    ...parsed,
+    startDate: new Date(parsed.startDate),
+    endDate: new Date(parsed.endDate),
+  });
+
+  return NextResponse.json({ id }, { status: 201 });
 }
