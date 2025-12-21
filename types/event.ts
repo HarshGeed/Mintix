@@ -20,4 +20,6 @@ export type Event = {
   };
   
   export type UpdateEventInput = Partial<CreateEventInput>;
+
+  export type EventStatus = "UPCOMING" | "ONGOING" | "COMPLETED" | "CANCELLED";
   
