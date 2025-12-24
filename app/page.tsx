@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useEvents } from "@/hooks/useEvents";
 import DashboardCard from "@/components/DashboardCard";
@@ -11,13 +12,26 @@ import { getEventStatus } from "@/lib/event-status";
 
 export default function EventsDashboardPage() {
   const { data, isLoading, error } = useEvents();
-
+  const queryClient = useQueryClient();
   const router = useRouter();
 
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
   const PAGE_SIZE = 6;
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await fetch(`/api/events/${id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) throw new Error("Failed to delete event");
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+    },
+  });
 
   if (isLoading) return <p className="text-white p-10">Loading events...</p>;
 
@@ -129,16 +143,14 @@ export default function EventsDashboardPage() {
                     </button>
 
                     <button
-                      onClick={async () => {
+                      onClick={() => {
                         if (!confirm("Delete event?")) return;
-                        await fetch(`/api/events/${event.id}`, {
-                          method: "DELETE",
-                        });
-                        location.reload();
+                        deleteMutation.mutate(event.id);
                       }}
                       className="text-red-400 hover:text-red-300"
+                      disabled={deleteMutation.isPending}
                     >
-                      Delete
+                      {deleteMutation.isPending ? "Deleting..." : "Delete"}
                     </button>
                   </td>
                 </motion.tr>
