@@ -122,7 +122,14 @@ export default function EventsDashboardPage() {
                   transition={{ duration: 0.2 }}
                   className="border-t border-white/10 hover:bg-white/5"
                 >
-                  <td className="px-6 py-4">{event.title}</td>
+                  <td className="px-6 py-4">
+                    <button
+                      onClick={() => router.push(`/events/${event.id}`)}
+                      className="text-left hover:text-blue-400 transition-colors font-medium"
+                    >
+                      {event.title}
+                    </button>
+                  </td>
                   <td className="px-6 py-4">
                     {new Date(event.startDate).toLocaleString()}
                   </td>

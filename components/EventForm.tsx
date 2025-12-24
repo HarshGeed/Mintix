@@ -144,7 +144,7 @@ export default function EventForm({
           <div className="relative">
             <input
               type="datetime-local"
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-white [color-scheme:dark]"
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-white [scheme-dark]"
               value={form.startDate}
               onChange={(e) => setForm({ ...form, startDate: e.target.value })}
               required
@@ -172,7 +172,7 @@ export default function EventForm({
           <div className="relative">
             <input
               type="datetime-local"
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-white [color-scheme:dark]"
+              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-white [scheme-dark]"
               value={form.endDate}
               onChange={(e) => setForm({ ...form, endDate: e.target.value })}
               required
