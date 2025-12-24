@@ -91,17 +91,31 @@ export default function EventForm({
 
       {/* Description */}
       <div>
-        <label className="block text-sm font-medium text-gray-300 mb-2">
-          Description <span className="text-red-400">*</span>
-        </label>
+        <div className="flex items-center justify-between mb-2">
+          <label className="block text-sm font-medium text-gray-300">
+            Description <span className="text-red-400">*</span>
+          </label>
+          <span className="text-xs text-gray-400">
+            {form.description.trim() ? form.description.trim().split(/\s+/).filter(word => word.length > 0).length : 0}/50 words
+          </span>
+        </div>
         <textarea
           className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-white placeholder-gray-500 resize-none"
-          placeholder="Describe your event..."
+          placeholder="Describe your event... (max 50 words)"
           rows={4}
           value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
+          onChange={(e) => {
+            const text = e.target.value;
+            const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+            if (words.length <= 50 || text.length < form.description.length) {
+              setForm({ ...form, description: text });
+            }
+          }}
           required
         />
+        {form.description.trim().split(/\s+/).filter(word => word.length > 0).length >= 50 && (
+          <p className="text-xs text-red-400 mt-1">Maximum 50 words reached</p>
+        )}
       </div>
 
       {/* Location and Online Toggle */}

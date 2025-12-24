@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter, useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import EventForm from "@/components/EventForm";
@@ -8,6 +8,7 @@ import EventForm from "@/components/EventForm";
 export default function EditEventPage() {
   const router = useRouter();
   const params = useParams();
+  const queryClient = useQueryClient();
   const id = params.id as string;
 
   const { data, isLoading } = useQuery({
@@ -32,7 +33,12 @@ export default function EditEventPage() {
       if (!res.ok) throw new Error("Failed to update event");
       return res.json();
     },
-    onSuccess: () => router.push("/"),
+    onSuccess: () => {
+      // Invalidate both the events list and the specific event query
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+      queryClient.invalidateQueries({ queryKey: ["event", id] });
+      router.push("/");
+    },
   });
 
   if (isLoading) {

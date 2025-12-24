@@ -168,7 +168,7 @@ export default function EventDetailsPage() {
                           <h1 className="text-2xl font-bold truncate">{event.title}</h1>
                           <StatusBadge status={status} />
                         </div>
-                        <p className="text-gray-400 text-sm mb-4 line-clamp-2">
+                        <p className="text-gray-400 text-sm mb-4">
                           {event.description}
                         </p>
                       </div>
